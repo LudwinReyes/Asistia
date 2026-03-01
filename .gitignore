@@ -2,12 +2,12 @@
 __pycache__/
 *.pyc
 
-# Virtual environments
+# Virtual environments (pip install y python)
 myenv/
 venv/
 env/
 
-# Node dependencies
+# Node dependencies (npm install)
 node_modules/
 
 # Dataset files
@@ -18,17 +18,14 @@ Dataset/
 
 # Log files
 *.log
-attendance.csv
-attendance_log.xlsx
 
 # Jupyter Notebook checkpoints
 *.ipynb_checkpoints
 
 # Model files
-*.pth
-*.pkl
-*.npy
-*.pt
+# NOTA: Solo ignoramos facenet_model.pth porque pesa 112MB y GitHub lo rechazaría por exceder el límite de 100MB.
+# El resto de modelos (.pkl, .npy, .pth) SÍ se subirán.
+facenet_model.pth
 
 # Python scripts not to push
 crop.py
