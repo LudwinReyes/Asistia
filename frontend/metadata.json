@@ -1,0 +1,5 @@
+{
+  "name": "Sistema de Asistencia Empresarial",
+  "description": "Sistema corporativo para el control de asistencia de empleados con geolocalización y reconocimiento facial.",
+  "requestFramePermissions": ["geolocation", "camera"]
+}

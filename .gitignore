@@ -1,0 +1,34 @@
+# Python cache files
+__pycache__/
+*.pyc
+
+# Virtual environments
+myenv/
+venv/
+env/
+
+# Node dependencies
+node_modules/
+
+# Dataset files
+Dataset.zip
+processed_dataset/
+Output images/
+Dataset/
+
+# Log files
+*.log
+attendance.csv
+attendance_log.xlsx
+
+# Jupyter Notebook checkpoints
+*.ipynb_checkpoints
+
+# Model files
+*.pth
+*.pkl
+*.npy
+*.pt
+
+# Python scripts not to push
+crop.py
