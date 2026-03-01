@@ -7,8 +7,12 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import * as dotenv from 'dotenv'; // Añadido para procesar el archivo .env
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Cargar variables de entorno desde .env
+dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-for-sandbox';
 
