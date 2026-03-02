@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { LogIn, LogOut, Clock, MapPin, AlertCircle, CheckCircle2, X, ShieldCheck } from 'lucide-react';
+import { LogIn, LogOut, Clock, MapPin, AlertCircle, CheckCircle2, X, ShieldCheck, Camera } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Webcam from 'react-webcam';
