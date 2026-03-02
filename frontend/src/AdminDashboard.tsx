@@ -95,7 +95,8 @@ export default function AdminDashboard() {
 
     captureInterval.current = { isStopped: false } as any;
 
-    const flaskUrl = import.meta.env.VITE_FLASK_API_URL || 'http://localhost:5000';
+    // Use relative URL in production to let Vercel rewrite rules handle the proxy avoiding CORS
+    const flaskUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_FLASK_API_URL || 'http://localhost:5000');
     const apiKey = import.meta.env.VITE_FLASK_API_KEY || '';
 
     // Fire-and-forget: send one frame without blocking the capture loop

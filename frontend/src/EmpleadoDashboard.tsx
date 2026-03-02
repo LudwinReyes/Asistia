@@ -47,7 +47,8 @@ export default function EmpleadoDashboard() {
     setMessage({ type: 'success', text: 'Analizando rostro...' });
 
     try {
-      const flaskUrl = import.meta.env.VITE_FLASK_API_URL || 'http://localhost:5000';
+      // Use relative URL in production to let Vercel rewrite rules handle the proxy avoiding CORS
+      const flaskUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_FLASK_API_URL || 'http://localhost:5000');
       const flaskRes = await fetch(`${flaskUrl}/recognize_face`, {
         method: 'POST',
         headers: {
