@@ -1,0 +1,27 @@
+{
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": "vite",
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "https://asistiaface-back.duckdns.org/api/$1"
+        },
+        {
+            "source": "/register_face",
+            "destination": "https://asistiaface-back.duckdns.org/register_face"
+        },
+        {
+            "source": "/recognize_face",
+            "destination": "https://asistiaface-back.duckdns.org/recognize_face"
+        },
+        {
+            "source": "/delete_user",
+            "destination": "https://asistiaface-back.duckdns.org/delete_user"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}
