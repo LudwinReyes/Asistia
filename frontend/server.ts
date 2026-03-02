@@ -65,6 +65,9 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Trust first proxy (Nginx) for rate limiter to work correctly
+  app.set('trust proxy', 1);
+
   // CORS — allowed origins
   const allowedOrigins = [
     'http://localhost:3000',
