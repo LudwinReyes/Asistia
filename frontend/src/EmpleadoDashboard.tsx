@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import { LogIn, LogOut, Clock, MapPin, AlertCircle, CheckCircle2, Camera } from 'lucide-react';
+import { LogIn, LogOut, Clock, MapPin, AlertCircle, CheckCircle2, Camera, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Webcam from 'react-webcam';
@@ -9,6 +9,7 @@ export default function EmpleadoDashboard() {
   const { user, token, logout } = useAuth();
   const [registros, setRegistros] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const webcamRef = useRef<Webcam>(null);
 
@@ -180,43 +181,71 @@ export default function EmpleadoDashboard() {
           )}
 
           <div className="flex flex-col items-center mb-6">
-            <div className="relative w-full max-w-lg aspect-video rounded-xl overflow-hidden bg-slate-900 border-2 border-slate-800 mb-8 shadow-inner">
-              <Webcam
-                audio={false}
-                ref={webcamRef as any}
-                screenshotFormat="image/jpeg"
-                videoConstraints={{ width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }}
-                className="w-full h-full object-cover"
-                disablePictureInPicture={false}
-                forceScreenshotSourceSize={true}
-                imageSmoothing={true}
-                mirrored={false}
-                onUserMedia={() => { }}
-                onUserMediaError={() => { }}
-                screenshotQuality={1}
-              />
-              {/* Face guide overlay */}
-              <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <div className="w-40 h-56 border-2 border-dashed border-green-400/70 rounded-[100px] shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] relative overflow-hidden">
-                  {/* Scanning line animation */}
-                  <div className="absolute left-0 right-0 h-1 bg-green-400/80 animate-[scan_2s_ease-in-out_infinite] shadow-[0_0_10px_rgba(74,222,128,1)]"></div>
+            {!isCameraActive ? (
+              <div className="w-full max-w-lg aspect-video rounded-xl overflow-hidden bg-slate-100 border-2 border-slate-200 mb-8 flex flex-col items-center justify-center p-6 text-center">
+                <Camera className="h-16 w-16 text-slate-300 mb-4" />
+                <h3 className="text-lg font-medium text-slate-800 mb-2">Cámara Inactiva</h3>
+                <p className="text-sm text-slate-500 mb-6">
+                  Hemos pausado la cámara automáticamente para no consumir los datos, batería o memoria de tu dispositivo.
+                </p>
+                <button
+                  onClick={() => {
+                    setMessage(null);
+                    setIsCameraActive(true);
+                  }}
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <Camera className="h-4 w-4 mr-2" />
+                  Activar Cámara para Asistencia
+                </button>
+              </div>
+            ) : (
+              <div className="relative w-full max-w-lg aspect-video rounded-xl overflow-hidden bg-slate-900 border-2 border-slate-800 mb-8 shadow-inner group">
+                <button
+                  onClick={() => setIsCameraActive(false)}
+                  className="absolute top-4 right-4 z-10 p-2 bg-slate-900/60 hover:bg-red-500/90 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
+                  title="Apagar Cámara"
+                >
+                  <span className="sr-only">Cerrar cámara</span>
+                  <X className="h-5 w-5" />
+                </button>
+                <Webcam
+                  audio={false}
+                  ref={webcamRef as any}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={{ width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }}
+                  className="w-full h-full object-cover"
+                  disablePictureInPicture={false}
+                  forceScreenshotSourceSize={true}
+                  imageSmoothing={true}
+                  mirrored={false}
+                  onUserMedia={() => { }}
+                  onUserMediaError={() => { }}
+                  screenshotQuality={1}
+                />
+                {/* Face guide overlay */}
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                  <div className="w-40 h-56 border-2 border-dashed border-green-400/70 rounded-[100px] shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                    {/* Scanning line animation */}
+                    <div className="absolute left-0 right-0 h-1 bg-green-400/80 animate-[scan_2s_ease-in-out_infinite] shadow-[0_0_10px_rgba(74,222,128,1)]"></div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               <button
                 onClick={() => captureAndMark('entrada')}
-                disabled={loading}
-                className="flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900 disabled:opacity-50 transition-colors shadow-sm"
+                disabled={loading || !isCameraActive}
+                className="flex items-center justify-center px-6 py-4 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
                 <LogIn className="h-5 w-5 mr-2" />
                 {loading ? 'Procesando...' : 'Marcar Entrada'}
               </button>
               <button
                 onClick={() => captureAndMark('salida')}
-                disabled={loading}
-                className="flex items-center justify-center px-6 py-4 border border-slate-300 text-base font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900 disabled:opacity-50 transition-colors shadow-sm"
+                disabled={loading || !isCameraActive}
+                className="flex items-center justify-center px-6 py-4 border border-slate-300 text-base font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
                 <LogOut className="h-5 w-5 mr-2" />
                 {loading ? 'Procesando...' : 'Marcar Salida'}
